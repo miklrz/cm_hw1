@@ -61,10 +61,10 @@ class ShellEmulator:
         for item in self.fs.getmembers():
             if self.current_dir == '/' and '/' not in item.name.lstrip('/'):
                 items.append(item.name)
-            elif item.name.startswith(self.current_dir):
+            if item.name.startswith(self.current_dir):
                 relative_path = item.name[len(self.current_dir):]
-                if '/' not in relative_path.strip('/'):
-                    items.append(relative_path)
+                if '/' not in relative_path.strip('/') and relative_path != '':
+                    items.append(relative_path.strip('/'))
         if items:
             print('\n'.join(items))
         else:
@@ -81,6 +81,8 @@ class ShellEmulator:
                 self.current_dir = '/'.join(self.current_dir.split('/')[:-1]) or '/'
         elif path in self.fs.getnames():
             self.current_dir = path
+        elif self.current_dir+'/'+path in self.fs.getnames():
+            self.current_dir = self.current_dir+'/'+path
         else:
             print(f"cd: no such file or directory: {path}")
 
