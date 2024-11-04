@@ -1,0 +1,17 @@
+[
+    {
+        "user": "user",
+        "command": "cd test_fs",
+        "timestamp": "2024-11-04T14:54:27.667044"
+    },
+    {
+        "user": "user",
+        "command": "cd ..",
+        "timestamp": "2024-11-04T14:54:37.221701"
+    },
+    {
+        "user": "user",
+        "command": "exit",
+        "timestamp": "2024-11-04T14:54:47.077083"
+    }
+]

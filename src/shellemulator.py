@@ -45,7 +45,7 @@ class ShellEmulator:
         elif command == "ls":
             self.ls()
         elif command.startswith("cd"):
-            _, path = command.split(maxsplit=1)
+            path = command[3:]
             self.cd(path)
         elif command == "uptime":
             self.uptime()
@@ -57,17 +57,32 @@ class ShellEmulator:
 
     def ls(self):
         # Вывод содержимого директории
-        members = [member for member in self.fs.getmembers() if member.name.startswith(self.current_dir)]
-        for member in members:
-            print(member.name)
+        items = []
+        for item in self.fs.getmembers():
+            if self.current_dir == '/' and '/' not in item.name.lstrip('/'):
+                items.append(item.name)
+            elif item.name.startswith(self.current_dir):
+                relative_path = item.name[len(self.current_dir):]
+                if '/' not in relative_path.strip('/'):
+                    items.append(relative_path)
+        if items:
+            print('\n'.join(items))
+        else:
+            print("No files found.")
 
     def cd(self, path):
         # Переход в другую директорию
-        new_path = os.path.join(self.current_dir, path)
-        if any(member.name == new_path for member in self.fs.getmembers()):
-            self.current_dir = new_path
+        if path == '' or path == '/':
+            self.current_dir = '/'
+        elif path == '..':
+            if self.current_dir == '/':
+                print("Находитесь в корневой директории, нельзя подняться выше.")
+            else:
+                self.current_dir = '/'.join(self.current_dir.split('/')[:-1]) or '/'
+        elif path in self.fs.getnames():
+            self.current_dir = path
         else:
-            print(f"Нет такой директории: {path}")
+            print(f"cd: no such file or directory: {path}")
 
     def uptime(self):
         # Вывод времени работы сессии
