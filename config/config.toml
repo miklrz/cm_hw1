@@ -1,0 +1,14 @@
+# Имя пользователя, отображаемое в приглашении
+user = "user"
+
+# Имя компьютера, отображаемое в приглашении
+hostname = "localhost"
+
+# Путь к архиву виртуальной файловой системы (tar-файл)
+filesystem_path = "virtual_filesystem.tar"
+
+# Путь к файлу лога (json-файл)
+log_path = "session_log.json"
+
+# Путь к стартовому скрипту (текстовый файл с командами, по одной на строку)
+startup_script = "startup_script.txt"
