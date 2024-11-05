@@ -1,17 +1,97 @@
 [
     {
         "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:21:57.998969"
+    },
+    {
+        "user": "user",
         "command": "cd test_fs",
-        "timestamp": "2024-11-04T14:54:27.667044"
+        "timestamp": "2024-11-05T11:22:01.152667"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:02.173536"
+    },
+    {
+        "user": "user",
+        "command": "cd dir1",
+        "timestamp": "2024-11-05T11:22:04.221698"
+    },
+    {
+        "user": "user",
+        "command": "rmdir dir1",
+        "timestamp": "2024-11-05T11:22:07.584329"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:17.519529"
+    },
+    {
+        "user": "user",
+        "command": "cd dir2",
+        "timestamp": "2024-11-05T11:22:20.268677"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:21.001084"
+    },
+    {
+        "user": "user",
+        "command": "rmdir dir_to_delete",
+        "timestamp": "2024-11-05T11:22:25.957048"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:27.959431"
     },
     {
         "user": "user",
         "command": "cd ..",
-        "timestamp": "2024-11-04T14:54:37.221701"
+        "timestamp": "2024-11-05T11:22:30.011979"
+    },
+    {
+        "user": "user",
+        "command": "cdls",
+        "timestamp": "2024-11-05T11:22:33.486305"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:35.098520"
+    },
+    {
+        "user": "user",
+        "command": "rmdir dir2",
+        "timestamp": "2024-11-05T11:22:38.643942"
+    },
+    {
+        "user": "user",
+        "command": "cd ..",
+        "timestamp": "2024-11-05T11:22:43.685249"
+    },
+    {
+        "user": "user",
+        "command": "rmdir dir1",
+        "timestamp": "2024-11-05T11:22:56.543355"
+    },
+    {
+        "user": "user",
+        "command": "ls",
+        "timestamp": "2024-11-05T11:22:57.361374"
+    },
+    {
+        "user": "user",
+        "command": "cd ..",
+        "timestamp": "2024-11-05T11:22:59.857449"
     },
     {
         "user": "user",
         "command": "exit",
-        "timestamp": "2024-11-04T14:54:47.077083"
+        "timestamp": "2024-11-05T11:23:02.833320"
     }
 ]

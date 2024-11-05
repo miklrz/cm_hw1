@@ -4,6 +4,7 @@ import json
 import toml
 import datetime
 import sys
+import tempfile
 from pathlib import Path
 
 class ShellEmulator:
@@ -92,16 +93,49 @@ class ShellEmulator:
 
     def rmdir(self, path):
         # Удаление директории
-        target_path = os.path.join(self.current_dir, path)
-        if any(member.name == target_path for member in self.fs.getmembers()):
-            print(f"Удалена директория: {target_path}")
-        else:
-            print(f"Директория не найдена: {path}")
+        normalized_path = os.path.join(self.current_dir, path).lstrip('/')
+        
+        # Проверяем, пуста ли директория и существует ли она
+        members_to_keep = []
+        directory_exists = False
+        directory_empty = True
+        
+        for member in self.fs.getmembers():
+            if member.name == normalized_path and member.isdir():
+                directory_exists = True
+            elif member.name.startswith(normalized_path + '/'):
+                directory_empty = False
+            else:
+                members_to_keep.append(member)
+
+        if not directory_exists:
+            print(f"Директория {path} не найдена.")
+            return
+
+        if not directory_empty:
+            print(f"Директория {path} не пуста, удаление невозможно.")
+            return
+
+        # Пересоздаем архив без удаленной директории
+        with tempfile.NamedTemporaryFile(delete=False) as temp_tar_file:
+            temp_tar_path = temp_tar_file.name
+        
+        with tarfile.open(temp_tar_path, "w") as new_tar:
+            for member in members_to_keep:
+                fileobj = self.fs.extractfile(member) if member.isfile() else None
+                new_tar.addfile(member, fileobj=fileobj)
+        
+        self.fs.close()
+        
+        # Заменяем старый архив новым
+        os.replace(temp_tar_path, self.fs_path)
+        self.fs = tarfile.open(self.fs_path, "r")
 
     def exit(self):
         # Выход и запись лога
         with open(self.log_path, 'w') as log_file:
             json.dump(self.log_data, log_file, indent=4)
+        self.fs.close()
         print("Сеанс завершен.")
         sys.exit()
 
