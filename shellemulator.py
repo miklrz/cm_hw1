@@ -9,7 +9,7 @@ from pathlib import Path
 
 class ShellEmulator:
     def __init__(self, config_path):
-        # Загружаем конфигурацию из файла TOML
+        """Загружаем конфигурацию из файла TOML"""
         self.config = toml.load(config_path)
         self.user = self.config["user"]
         self.hostname = self.config["hostname"]
@@ -23,7 +23,7 @@ class ShellEmulator:
         self.fs = tarfile.open(self.fs_path, "r")
 
     def log_action(self, command):
-        # Логируем действия пользователя
+        """Логируем действия пользователя"""
         entry = {
             "user": self.user,
             "command": command,
@@ -32,7 +32,7 @@ class ShellEmulator:
         self.log_data.append(entry)
     
     def run_startup_script(self):
-        # Запуск команд из стартового скрипта
+        """Запуск команд из стартового скрипта"""
         if os.path.exists(self.startup_script_path):
             with open(self.startup_script_path) as script:
                 for command in script:
@@ -57,7 +57,7 @@ class ShellEmulator:
             print(f"Команда не распознана: {command}")
 
     def ls(self):
-        # Вывод содержимого директории
+        """Вывод содержимого директории"""
         items = []
         for item in self.fs.getmembers():
             if self.current_dir == '/' and '/' not in item.name.lstrip('/'):
@@ -72,7 +72,7 @@ class ShellEmulator:
             print("No files found.")
 
     def cd(self, path):
-        # Переход в другую директорию
+        """Переход в другую директорию"""
         if path == '' or path == '/':
             self.current_dir = '/'
         elif path == '..':
@@ -88,11 +88,11 @@ class ShellEmulator:
             print(f"cd: no such file or directory: {path}")
 
     def uptime(self):
-        # Вывод времени работы сессии
+        """Вывод времени работы сессии"""
         print("Сессия работает с:", datetime.datetime.now().isoformat())
 
     def rmdir(self, path):
-        # Удаление директории
+        """Удаление директории"""
         normalized_path = os.path.join(self.current_dir, path).lstrip('/')
         
         # Проверяем, пуста ли директория и существует ли она
@@ -132,7 +132,7 @@ class ShellEmulator:
         self.fs = tarfile.open(self.fs_path, "r")
 
     def exit(self):
-        # Выход и запись лога
+        """Выход и запись лога"""
         with open(self.log_path, 'w') as log_file:
             json.dump(self.log_data, log_file, indent=4)
         self.fs.close()
@@ -140,11 +140,11 @@ class ShellEmulator:
         sys.exit()
 
     def prompt(self):
-        # Отображение приглашения
+        """Отображение приглашения"""
         return f"{self.user}@{self.hostname}:{self.current_dir}$ "
 
     def run(self):
-        # Основной цикл эмулятора
+        """Основной цикл эмулятора"""
         self.run_startup_script()
         while True:
             command = input(self.prompt())
