@@ -1,22 +1,37 @@
 [
     {
         "user": "user",
+        "command": "cd dir1",
+        "timestamp": "2024-11-18T11:46:30.455542"
+    },
+    {
+        "user": "user",
         "command": "ls",
-        "timestamp": "2024-11-05T12:44:50.397850"
+        "timestamp": "2024-11-18T11:46:38.415736"
     },
     {
         "user": "user",
         "command": "cd test_fs",
-        "timestamp": "2024-11-05T12:44:54.158973"
+        "timestamp": "2024-11-18T11:47:25.552161"
     },
     {
         "user": "user",
-        "command": "uptime",
-        "timestamp": "2024-11-05T12:45:06.552958"
+        "command": "ls",
+        "timestamp": "2024-11-18T11:47:26.553480"
+    },
+    {
+        "user": "user",
+        "command": "cd dir1",
+        "timestamp": "2024-11-18T11:47:28.569777"
+    },
+    {
+        "user": "user",
+        "command": "& C:/Users/mmyty/anaconda3/python.exe c:/Users/mmyty/VsCode_projects/cm_hw1/test_shellemulator.py",
+        "timestamp": "2024-11-18T11:47:40.615545"
     },
     {
         "user": "user",
         "command": "exit",
-        "timestamp": "2024-11-05T12:45:12.276217"
+        "timestamp": "2024-11-18T11:47:44.639626"
     }
 ]

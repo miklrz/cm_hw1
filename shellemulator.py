@@ -7,6 +7,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+
 class ShellEmulator:
     def __init__(self, config_path):
         """Загружаем конфигурацию из файла TOML"""
@@ -16,7 +17,7 @@ class ShellEmulator:
         self.fs_path = self.config["filesystem_path"]
         self.log_path = self.config["log_path"]
         self.startup_script_path = self.config["startup_script"]
-        self.current_dir = '/'
+        self.current_dir = "/"
         self.log_data = []
 
         # Открываем виртуальную файловую систему
@@ -27,17 +28,17 @@ class ShellEmulator:
         entry = {
             "user": self.user,
             "command": command,
-            "timestamp": datetime.datetime.now().isoformat()
+            "timestamp": datetime.datetime.now().isoformat(),
         }
         self.log_data.append(entry)
-    
+
     def run_startup_script(self):
         """Запуск команд из стартового скрипта"""
         if os.path.exists(self.startup_script_path):
             with open(self.startup_script_path) as script:
                 for command in script:
                     self.execute_command(command.strip())
-    
+
     def execute_command(self, command):
         # Выполнение команд
         self.log_action(command)
@@ -60,30 +61,30 @@ class ShellEmulator:
         """Вывод содержимого директории"""
         items = []
         for item in self.fs.getmembers():
-            if self.current_dir == '/' and '/' not in item.name.lstrip('/'):
+            if self.current_dir == "/" and "/" not in item.name.lstrip("/"):
                 items.append(item.name)
             if item.name.startswith(self.current_dir):
-                relative_path = item.name[len(self.current_dir):]
-                if '/' not in relative_path.strip('/') and relative_path != '':
-                    items.append(relative_path.strip('/'))
+                relative_path = item.name[len(self.current_dir) :]
+                if "/" not in relative_path.strip("/") and relative_path != "":
+                    items.append(relative_path.strip("/"))
         if items:
-            print('\n'.join(items))
+            print("\n".join(items))
         else:
             print("No files found.")
 
     def cd(self, path):
         """Переход в другую директорию"""
-        if path == '' or path == '/':
-            self.current_dir = '/'
-        elif path == '..':
-            if self.current_dir == '/':
+        if path == "" or path == "/":
+            self.current_dir = "/"
+        elif path == "..":
+            if self.current_dir == "/":
                 print("Находитесь в корневой директории, нельзя подняться выше.")
             else:
-                self.current_dir = '/'.join(self.current_dir.split('/')[:-1]) or '/'
+                self.current_dir = "/".join(self.current_dir.split("/")[:-1]) or "/"
         elif path in self.fs.getnames():
             self.current_dir = path
-        elif self.current_dir+'/'+path in self.fs.getnames():
-            self.current_dir = self.current_dir+'/'+path
+        elif self.current_dir + "/" + path in self.fs.getnames():
+            self.current_dir = self.current_dir + "/" + path
         else:
             print(f"cd: no such file or directory: {path}")
 
@@ -93,17 +94,17 @@ class ShellEmulator:
 
     def rmdir(self, path):
         """Удаление директории"""
-        normalized_path = os.path.join(self.current_dir, path).lstrip('/')
-        
+        normalized_path = os.path.join(self.current_dir, path).lstrip("/")
+
         # Проверяем, пуста ли директория и существует ли она
         members_to_keep = []
         directory_exists = False
         directory_empty = True
-        
+
         for member in self.fs.getmembers():
             if member.name == normalized_path and member.isdir():
                 directory_exists = True
-            elif member.name.startswith(normalized_path + '/'):
+            elif member.name.startswith(normalized_path + "/"):
                 directory_empty = False
             else:
                 members_to_keep.append(member)
@@ -119,25 +120,25 @@ class ShellEmulator:
         # Пересоздаем архив без удаленной директории
         with tempfile.NamedTemporaryFile(delete=False) as temp_tar_file:
             temp_tar_path = temp_tar_file.name
-        
+
         with tarfile.open(temp_tar_path, "w") as new_tar:
             for member in members_to_keep:
                 fileobj = self.fs.extractfile(member) if member.isfile() else None
                 new_tar.addfile(member, fileobj=fileobj)
-        
-        self.fs.close()
-        
+
+        self.close()
+
         # Заменяем старый архив новым
         os.replace(temp_tar_path, self.fs_path)
         self.fs = tarfile.open(self.fs_path, "r")
 
     def exit(self):
         """Выход и запись лога"""
-        with open(self.log_path, 'w') as log_file:
+        with open(self.log_path, "w") as log_file:
             json.dump(self.log_data, log_file, indent=4)
-        self.fs.close()
+        self.close()
         print("Сеанс завершен.")
-        sys.exit()
+        sys.exit(0)
 
     def prompt(self):
         """Отображение приглашения"""
@@ -149,6 +150,10 @@ class ShellEmulator:
         while True:
             command = input(self.prompt())
             self.execute_command(command)
+
+    def close(self):
+        self.fs.close()
+
 
 if __name__ == "__main__":
     emulator = ShellEmulator("config/config.toml")
