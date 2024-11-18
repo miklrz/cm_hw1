@@ -19,6 +19,7 @@ class ShellEmulator:
         self.startup_script_path = self.config["startup_script"]
         self.current_dir = "/"
         self.log_data = []
+        self.start_time = datetime.datetime.now()
 
         # Открываем виртуальную файловую систему
         self.fs = tarfile.open(self.fs_path, "r")
@@ -89,8 +90,15 @@ class ShellEmulator:
             print(f"cd: no such file or directory: {path}")
 
     def uptime(self):
-        """Вывод времени работы сессии"""
-        print("Сессия работает с:", datetime.datetime.now().isoformat())
+        """Форматирует и возвращает строку с временем работы сессии."""
+        current_time = datetime.datetime.now()
+        uptime_duration = current_time - self.start_time
+        formatted_uptime = str(uptime_duration).split(".")[0]
+        result = (
+            f"Сессия работает: {current_time.isoformat()} "
+            f"Время работы: {formatted_uptime}"
+        )
+        print(result)
 
     def rmdir(self, path):
         """Удаление директории"""
