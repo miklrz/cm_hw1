@@ -1,12 +1,7 @@
 [
     {
         "user": "user",
-        "command": "uptime",
-        "timestamp": "2024-11-18T12:17:53.382682"
-    },
-    {
-        "user": "user",
         "command": "exit",
-        "timestamp": "2024-11-18T12:17:54.454875"
+        "timestamp": "2024-11-26T11:16:46.945573"
     }
 ]
